@@ -1,0 +1,103 @@
+﻿@page
+@using TodoAppV2.Models
+@model TodoAppV2.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Todo List";
+}
+
+<h1>Todo List</h1>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <form method="post" asp-page-handler="Add" class="p-3 border rounded shadow-sm">
+            <h4>Add New Task</h4>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="d-flex align-items-end gap-3">
+
+                <div class="form-group flex-grow-1">
+                    <label asp-for="NewItem.Title" class="form-label"></label>
+                    <input asp-for="NewItem.Title" class="form-control" />
+                    <span asp-validation-for="NewItem.Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group" style="width: 150px;">
+                    <label asp-for="NewItem.Priority" class="form-label"></label>
+                    <input asp-for="NewItem.Priority" class="form-control" />
+                    <span asp-validation-for="NewItem.Priority" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Add Task" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+
+@if (TempData["DeleteError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["DeleteError"]
+    </div>
+}
+
+<h2>Existing Tasks</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.TodoItems.First().Title)</th>
+            <th>@Html.DisplayNameFor(model => model.TodoItems.First().Priority)</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TodoItems)
+        {
+            <tr class="@(item.IsCompleted ? "table-success" : "")">
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Priority)</td>
+                <td>
+                    @switch (item.Status)
+                    {
+                        case TodoStatus.Completed:
+                            <span class="badge bg-success">Completed</span>
+                            break;
+                        case TodoStatus.InProgress:
+                            <span class="badge bg-warning text-dark">In Progress</span>
+                            break;
+                        default:
+                            <span class="badge bg-secondary">Not Started</span>
+                            break;
+                    }
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline;"
+                          onsubmit="return @(item.IsCompleted.ToString().ToLower()) ? true : (alert('Only completed tasks can be deleted.'), false);">
+
+                   @*  <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline;"> *@
+
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                disabled="@(!item.IsCompleted)">
+                            Delete
+                        </button>
+                      @*   <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button> *@
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    @{
+        // This line enables client-side validation using unobtrusive jQuery validation
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
