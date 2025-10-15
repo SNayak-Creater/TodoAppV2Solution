@@ -80,15 +80,10 @@
                     <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline;"
                           onsubmit="return @(item.IsCompleted.ToString().ToLower()) ? true : (alert('Only completed tasks can be deleted.'), false);">
 
-                   @*  <form method="post" asp-page-handler="Delete" asp-route-id="@item.Id" style="display:inline;"> *@
-
                         <button type="submit" class="btn btn-sm btn-danger"
                                 disabled="@(!item.IsCompleted)">
                             Delete
                         </button>
-                      @*   <button type="submit" class="btn btn-sm btn-danger">
-                            Delete
-                        </button> *@
                     </form>
                 </td>
             </tr>
