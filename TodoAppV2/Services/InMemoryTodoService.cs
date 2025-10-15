@@ -42,14 +42,6 @@ namespace TodoAppV2.Services
         }
 
         // Business Rule: Check for uniqueness (case-insensitive)
-        //public async Task<bool> ExistsWithNameAsync(string title, int excludeId = 0)
-        //{
-        //    return await Task.FromResult(
-        //        _todoItems.Any(t =>
-        //            t.Title.Equals(title, StringComparison.OrdinalIgnoreCase) && t.Id != excludeId
-        //        )
-        //    );
-        //}
         public async Task<bool> ExistsWithNameAsync(string title, int excludeId = 0)
         {
             // Normalize the title the user is trying to check/add

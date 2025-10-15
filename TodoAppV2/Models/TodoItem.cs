@@ -14,7 +14,6 @@ namespace TodoAppV2.Models
     {
         public int Id { get; set; }
 
-        // 1. Validation: Task Name is required
         [Required(ErrorMessage = "Task Name is required.")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Task Name must be between 3 and 100 characters.")]
         [Display(Name = "Task Name")]
@@ -28,12 +27,10 @@ namespace TodoAppV2.Models
         //)]
         public string Title { get; set; } = string.Empty;
 
-        // 2. Validation: Priority is a required number (int)
         [Required(ErrorMessage = "Priority is required.")]
         [Range(1, 100, ErrorMessage = "Priority must be a number between 1 and 100.")]
         public int Priority { get; set; }
 
-        // 3. Status
         public TodoStatus Status { get; set; } = TodoStatus.NotStarted;
 
         // Helper property to check completion status
